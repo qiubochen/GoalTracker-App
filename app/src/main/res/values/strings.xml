@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">GoalTracker</string>
+    <string name="login_title">密码登录</string>
+    <string name="register_title">用户注册</string>
+    <string name="login_user_hint">用户名</string>
+    <string name="login_password_hint">密码</string>
+    <string name="login_button_login">登录</string>
+    <string name="register_user_hint">用户名</string>
+    <string name="register_password_hint">密码</string>
+    <string name="register_button_login">登录</string>
+    <string name="login_button_register">注册</string>
+    <string name="register_button_register">注册</string>
+    <string name="main_tab_person">个人</string>
+    <string name="main_tab_group">群体</string>
+    <string name="main_tab_data">数据</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
