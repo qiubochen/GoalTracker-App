@@ -2,11 +2,13 @@ package com.example.qiubo.goaltracker.model.DO;
 
 
 
+import org.litepal.crud.LitePalSupport;
+
 import java.io.Serializable;
 
 
 
-public class Event implements Serializable {
+public class Event extends LitePalSupport {
     private Long id;
 
     private String event;

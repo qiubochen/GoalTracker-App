@@ -71,6 +71,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         View view=inflater.inflate(R.layout.fragment_person, container, false);;
         userImageView=view.findViewById(R.id.person_user);
         userImageView.setOnClickListener(this);
+
         return view;
     }
 

@@ -1,13 +1,17 @@
 package com.example.qiubo.goaltracker.view.impl;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.qiubo.goaltracker.R;
@@ -30,7 +34,7 @@ import java.util.List;
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventFragment extends Fragment implements OnDateSelectedListener {
+public class EventFragment extends Fragment implements OnDateSelectedListener,View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,7 +47,9 @@ public class EventFragment extends Fragment implements OnDateSelectedListener {
     private OnFragmentInteractionListener mListener;
     private MaterialCalendarView materialCalendarView;
     private final String TAG = "EventFragment ";
-    List<CalendarDay>calendarDayList=new ArrayList<>();
+    private List<CalendarDay>calendarDayList=new ArrayList<>();
+    private FloatingActionButton addButton;
+
     public EventFragment() {
         // Required empty public constructor
     }
@@ -92,6 +98,8 @@ public class EventFragment extends Fragment implements OnDateSelectedListener {
         materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorAccent));
 
         materialCalendarView.setOnDateChangedListener(this);
+        addButton=view.findViewById(R.id.event_add);
+        addButton.setOnClickListener(this);
         return view;
     }
 
@@ -135,6 +143,26 @@ public class EventFragment extends Fragment implements OnDateSelectedListener {
 
       materialCalendarView.addDecorator(new SelectedDecorator(calendarDayList));
        // Toast.makeText(getActivity(),date.toString(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id=view.getId();
+        switch (id){
+            case  R.id.event_add:{
+                Intent intent=new Intent(getActivity(),NoteEventActivity.class);
+
+                List<String> labelList=new ArrayList<>();
+                for (CalendarDay calendarDay:calendarDayList){
+                    String s=calendarDay.getDate().toString();
+                    String[] itemList=s.split(" ");
+                    String label=itemList[1]+" "+itemList[2]+" "+itemList[5];
+                    labelList.add(label);
+                }
+                intent.putStringArrayListExtra("labelList", (ArrayList<String>) labelList);
+                startActivity(intent);
+            };break;
+        }
     }
 
     /**

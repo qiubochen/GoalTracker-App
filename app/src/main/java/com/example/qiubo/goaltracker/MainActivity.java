@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             System.out.println(e.getEvent());
             System.out.println(e.getPlanStartTime());
         }
-        LitePal.deleteAll(Event.class);
+
     }
         void initView(){
             tableLayout=findViewById(R.id.main_tablayout);

@@ -22,13 +22,20 @@
             android:background="@mipmap/outline_perm_identity_black_18dp"
             android:layout_gravity="left"
             android:id="@+id/person_user"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/outline_refresh_black_18dp"
-            android:layout_gravity="right"
-            android:id="@+id/person_refresh"/>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@mipmap/outline_refresh_black_18dp"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:id="@+id/person_refresh"/>-->
+
     </android.support.v7.widget.Toolbar>
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/fragment_person_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
