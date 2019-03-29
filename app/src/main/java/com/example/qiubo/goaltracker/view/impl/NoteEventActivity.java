@@ -132,6 +132,7 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
                   event.setPlanStartTime(TextChange.mergeTime(s,startTemp));
                   event.setPlanEndTime(TextChange.mergeTime(s,endTemp));
                   event.setEvent(editText);
+                  event.setDone(false);
                   eventList.add(event);
               }
                LitePal.saveAll(eventList);

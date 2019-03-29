@@ -27,6 +27,7 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.github.prolificinteractive:material-calendarview:1.6.0'
     implementation 'jp.wasabeef:richeditor-android:1.2.2'
+    implementation 'com.yanzhenjie.recyclerview:support:1.3.2'
 
     implementation 'com.github.thellmund:Android-Week-View:3.2.1'
     implementation 'com.android.support:support-v4:28.0.0'

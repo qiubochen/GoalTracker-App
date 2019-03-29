@@ -7,7 +7,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 
 import com.example.qiubo.goaltracker.adapter.MainFragmentAdapter;
 import com.example.qiubo.goaltracker.model.DO.Event;
@@ -16,6 +19,7 @@ import com.example.qiubo.goaltracker.view.impl.DataFragment;
 import com.example.qiubo.goaltracker.view.impl.EventFragment;
 import com.example.qiubo.goaltracker.view.impl.GroupFragment;
 import com.example.qiubo.goaltracker.view.impl.PersonFragment;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.litepal.LitePal;
 
@@ -39,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (Event e:eventList){
             System.out.println(e.getEvent());
             System.out.println(e.getPlanStartTime());
+            System.out.println(e.getDone());
         }
-
+        //LitePal.deleteAll(Event.class);
     }
         void initView(){
             tableLayout=findViewById(R.id.main_tablayout);
@@ -115,4 +120,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }

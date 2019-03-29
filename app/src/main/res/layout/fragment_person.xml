@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.impl.PersonFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,8 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/login_main_toolbar"
+        android:id="@+id/fragment_person_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorLucency"
@@ -35,11 +39,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+        </FrameLayout>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/person_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
-    <android.support.v7.widget.RecyclerView
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_person_recycle_view">
+    </com.yanzhenjie.recyclerview.SwipeRecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>

@@ -18,7 +18,9 @@ public class Event extends LitePalSupport {
 
 
     private String createTime;
-
+    /**
+     * done为1表示完成，done为0表示没完成
+     * */
     private Boolean done;
 
     private String uuid;
