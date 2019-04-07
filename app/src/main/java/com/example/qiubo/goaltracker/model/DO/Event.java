@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 
-public class Event extends LitePalSupport {
+public class Event extends LitePalSupport implements Serializable{
     private Long id;
 
     private String event;

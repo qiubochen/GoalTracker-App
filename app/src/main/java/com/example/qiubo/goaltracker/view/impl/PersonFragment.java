@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +26,7 @@ import android.widget.Toast;
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.adapter.FragmentPersonRecycleViewAdapter;
 import com.example.qiubo.goaltracker.model.DO.Event;
+import com.example.qiubo.goaltracker.service.AlarmService;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -62,6 +66,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private SwipeRefreshLayout swipeRefreshLayout;
     private FragmentPersonRecycleViewAdapter fragmentPersonRecycleViewAdapter;
     private List<Event>datas;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
     public PersonFragment() {
         // Required empty public constructor
     }
@@ -100,11 +106,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_person, container, false);
-        userImageView=view.findViewById(R.id.person_user);
-        userImageView.setOnClickListener(this);
+        //userImageView=view.findViewById(R.id.person_user);
+        //userImageView.setOnClickListener(this);
         toolbar=view.findViewById(R.id.fragment_person_toolbar);
         swipeRecyclerView=view.findViewById(R.id.fragment_person_recycle_view);
         swipeRefreshLayout=view.findViewById(R.id.person_refresh_layout);
+        navigationView=view.findViewById(R.id.person_navigation_view);
+        drawerLayout=view.findViewById(R.id.person_drawer_layout);
         searchView = (MaterialSearchView) view.findViewById(R.id.fragment_person_search_view);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
@@ -124,10 +132,19 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             }
         });
         initToolbar();
-
+        initNavigaitonView();
         return view;
     }
 
+    private void initNavigaitonView(){
+//设置显示左上角的返回键
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //给左上角的图标加上开关属性，这个是套路，少一个步骤都触发不了开关效果。
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar,R.string.open_drawer,R.string.close_drawer);
+        //该方法会自动和actionBar关联, 将开关的图片显示在了action上，如果不设置，也可以有抽屉的效果，不过是默认的图标
+        mDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(mDrawerToggle);
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -163,10 +180,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         int id=view.getId();
         switch (id){
-            case R.id.person_user:{
-                Intent intent=new Intent(getActivity(),LoginActivity.class);
-                startActivity(intent);
-            };break;
+//            case R.id.person_user:{
+//                Intent intent=new Intent(getActivity(),LoginActivity.class);
+//                startActivity(intent);
+//            };break;
         }
     }
 
@@ -282,17 +299,27 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         public void onItemClick(SwipeMenuBridge menuBridge, int position) {
             menuBridge.closeMenu();
 
-//            int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
+           int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
 //            int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-            long id=datas.get(position).getId();
-            datas.remove(position);
-            fragmentPersonRecycleViewAdapter.notifyItemRemoved(position);
 
-            Event event=new Event();
-            event.setDone(true);
-          //  System.out.println(datas.get(position).getDone()+" "+position+datas.get(position));
+            if (direction==SwipeRecyclerView.RIGHT_DIRECTION){
+                Intent intentService=new Intent(getActivity(),AlarmService.class);
+                intentService.putExtra("event",datas.get(position).getEvent());
+                getActivity().startService(intentService);
+                Toast.makeText(getActivity(),"闹钟已提醒",Toast.LENGTH_LONG).show();
 
-            event.update(id);
+            }else if (direction == SwipeRecyclerView.LEFT_DIRECTION){
+                long id=datas.get(position).getId();
+                datas.remove(position);
+                fragmentPersonRecycleViewAdapter.notifyItemRemoved(position);
+
+                Event event=new Event();
+                event.setDone(true);
+                //  System.out.println(datas.get(position).getDone()+" "+position+datas.get(position));
+
+                event.update(id);
+            }
+
 //            if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
 //                Toast.makeText(getContext(), "list第" + position + " asd"+datas.get(position)+"; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
 //            } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
@@ -321,6 +348,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                     .setHeight(height);
             swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
+            SwipeMenuItem addAlarm = new SwipeMenuItem(getContext())
+                    .setImage(R.mipmap.baseline_alarm_add_black_18dp)
+                    .setWidth(120)
+                    .setHeight(height);
+            swipeRightMenu.addMenuItem(addAlarm);
 
         }
     };

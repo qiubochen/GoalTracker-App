@@ -19,6 +19,8 @@ import com.example.qiubo.goaltracker.view.impl.DataFragment;
 import com.example.qiubo.goaltracker.view.impl.EventFragment;
 import com.example.qiubo.goaltracker.view.impl.GroupFragment;
 import com.example.qiubo.goaltracker.view.impl.PersonFragment;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.litepal.LitePal;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         //button=findViewById(R.id.button);
        // button.setOnClickListener(this);
+
         initView();
         List<Event>eventList=LitePal.findAll(Event.class);
         for (Event e:eventList){

@@ -23,7 +23,7 @@ public class User implements Serializable {
     private String destoryTime;
 
 
-    private byte[] nickName;
+    private String nickName;
 
     private static final long serialVersionUID = 1L;
 
@@ -111,17 +111,11 @@ public class User implements Serializable {
         this.destoryTime = destoryTime == null ? null : destoryTime.trim();
     }
 
-    /**
-     * @return nick_name
-     */
-    public byte[] getNickName() {
+    public String getNickName() {
         return nickName;
     }
 
-    /**
-     * @param nickName
-     */
-    public void setNickName(byte[] nickName) {
+    public void setNickName(String nickName) {
         this.nickName = nickName;
     }
 
