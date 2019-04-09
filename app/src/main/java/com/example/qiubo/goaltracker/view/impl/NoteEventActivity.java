@@ -193,7 +193,9 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
                            }
                            System.out.println("结果:"+result);
                            //Toast.makeText(NoteEventActivity.this, result, Toast.LENGTH_LONG).show();
-                           result=mEditor.getHtml()+result;
+                           if (mEditor.getHtml()!=null) {
+                               result = mEditor.getHtml() + result;
+                           }
                            mEditor.setHtml(result);
                        }
                        System.out.println("调用onResult方法:"+recognizerResult.getResultString());

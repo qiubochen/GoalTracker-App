@@ -21,10 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@mipmap/baseline_add_white_18dp"
         app:borderWidth="2dp"
         app:fabSize="normal"
-        app:rippleColor="#ff0000"
+        app:rippleColor="@color/colorPrimary"
         />
 
 

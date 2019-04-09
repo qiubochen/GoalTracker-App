@@ -23,6 +23,6 @@ public class SelectedDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade dayViewFacade) {
-      dayViewFacade.addSpan(new DotSpan(5, Color.parseColor("#005AB5")));
+      dayViewFacade.addSpan(new DotSpan(5, Color.RED));
     }
 }

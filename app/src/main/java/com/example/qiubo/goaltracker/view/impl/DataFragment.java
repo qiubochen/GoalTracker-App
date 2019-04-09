@@ -1,6 +1,8 @@
 package com.example.qiubo.goaltracker.view.impl;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,10 +18,18 @@ import com.alamkanak.weekview.MonthChangeListener;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewDisplayable;
 import com.example.qiubo.goaltracker.R;
+import com.example.qiubo.goaltracker.model.CalendarItem;
+import com.example.qiubo.goaltracker.model.DO.Event;
 import com.example.qiubo.goaltracker.model.WeekEvent;
+import com.example.qiubo.goaltracker.util.DataUtil;
+import com.example.qiubo.goaltracker.util.DateUtil;
+import com.idtk.smallchart.chart.CombineChart;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.litepal.LitePal;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -32,8 +42,7 @@ import java.util.List;
  * Use the {@link DataFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DataFragment extends Fragment implements EventClickListener<WeekEvent>, MonthChangeListener<WeekEvent>,
-        EventLongPressListener<WeekEvent>, EmptyViewLongPressListener {
+public class DataFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,7 +53,7 @@ public class DataFragment extends Fragment implements EventClickListener<WeekEve
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private WeekView<WeekEvent> weekView;
+    private WeekView<CalendarItem> weekView;
     public DataFragment() {
         // Required empty public constructor
     }
@@ -80,12 +89,31 @@ public class DataFragment extends Fragment implements EventClickListener<WeekEve
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view=inflater.inflate(R.layout.fragment_data, container, false);
         weekView=view.findViewById(R.id.weekView);
-        weekView.setOnEventClickListener(this);
-        weekView.setMonthChangeListener(this);
-        weekView.setEventLongPressListener(this);
-        weekView.setEmptyViewLongPressListener(this);
+        if (weekView!=null){
+            weekView.setMonthChangeListener(new MonthChangeListener<CalendarItem>() {
+                @NotNull
+                @Override
+                public List<WeekViewDisplayable<CalendarItem>> onMonthChange(Calendar calendar, Calendar calendar1) {
+                  return DataUtil.getDataList(calendar,calendar1);
+                }
+
+            });
+
+        }
+
+
+        System.out.println("+++++++++++++");
+        weekView.setMinDate(DateUtil.getNowDate());
+        System.out.println(DateUtil.getNowDate().getTime());
+        weekView.setMaxDate(DateUtil.getAfterDate(5));
+        System.out.println(DateUtil.getAfterDate(5).getTime());
+        weekView.setNumberOfVisibleDays(5);
+
+
+
         return view;
     }
 
@@ -113,27 +141,6 @@ public class DataFragment extends Fragment implements EventClickListener<WeekEve
         mListener = null;
     }
 
-    @Override
-    public void onEventClick(WeekEvent weekEvent, RectF rectF) {
-
-    }
-
-    @NotNull
-    @Override
-    public List<WeekViewDisplayable<WeekEvent>> onMonthChange(Calendar calendar, Calendar calendar1) {
-        List<WeekViewDisplayable<WeekEvent>> list=new ArrayList<>();
-        return list;
-    }
-
-    @Override
-    public void onEmptyViewLongPress(Calendar calendar) {
-
-    }
-
-    @Override
-    public void onEventLongPress(WeekEvent weekEvent, RectF rectF) {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this

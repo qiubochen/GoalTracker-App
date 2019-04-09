@@ -95,7 +95,7 @@ public class EventFragment extends Fragment implements OnDateSelectedListener,Vi
                 .setMaximumDate(CalendarDay.from(2020, 5, 12))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
-        materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorAccent));
+        materialCalendarView.setSelectionColor(getResources().getColor(R.color.colorPrimary));
 
         materialCalendarView.setOnDateChangedListener(this);
         addButton=view.findViewById(R.id.event_add);

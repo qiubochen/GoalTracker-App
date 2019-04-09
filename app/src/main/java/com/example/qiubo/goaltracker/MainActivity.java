@@ -1,5 +1,6 @@
 package com.example.qiubo.goaltracker;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -42,12 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        // button.setOnClickListener(this);
 
         initView();
-        List<Event>eventList=LitePal.findAll(Event.class);
-        for (Event e:eventList){
-            System.out.println(e.getEvent());
-            System.out.println(e.getPlanStartTime());
-            System.out.println(e.getDone());
-        }
+//        List<Event>eventList=LitePal.findAll(Event.class);
+//        for (Event e:eventList){
+//            System.out.println(e.getEvent());
+//            System.out.println(e.getPlanStartTime());
+//            System.out.println(e.getDone());
+//        }
         //LitePal.deleteAll(Event.class);
     }
         void initView(){
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
             tableLayout.setupWithViewPager(viewPager);
+
             List<Fragment>fragmentList=new ArrayList<>();
             fragmentList.add(PersonFragment.newInstance("person","test"));
             fragmentList.add(EventFragment.newInstance("event","test"));
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             titleList.add(GROUP);
 
             MainFragmentAdapter mainFragmentAdapter =new MainFragmentAdapter(getSupportFragmentManager(),fragmentList,titleList);
-            viewPager.setOffscreenPageLimit(4);
+            //viewPager.setOffscreenPageLimit(4);
             viewPager.setAdapter(mainFragmentAdapter);
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -123,5 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 
 }
