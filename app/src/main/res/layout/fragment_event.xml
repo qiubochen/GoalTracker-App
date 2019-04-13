@@ -24,7 +24,6 @@
         android:src="@mipmap/baseline_add_white_18dp"
         app:borderWidth="2dp"
         app:fabSize="normal"
-        app:rippleColor="@color/colorPrimary"
         />
 
 

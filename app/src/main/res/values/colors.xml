@@ -7,4 +7,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlue">#005AB5</color>
     <color name="colorLucency">#00000000</color>
+    <color name="colorBlack">#000000</color>
 </resources>

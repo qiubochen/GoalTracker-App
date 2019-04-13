@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.model.DO.Event;
+import com.example.qiubo.goaltracker.util.DateUtil;
 
 import org.w3c.dom.Text;
 
@@ -32,6 +33,7 @@ public class FragmentPersonRecycleViewAdapter extends RecyclerView.Adapter<Fragm
     @Override
     public void onBindViewHolder(@NonNull FragementPersonViewHolder fragementPersonViewHolder, int i) {
         fragementPersonViewHolder.eventText.setText(datas.get(i).getEvent());
+        fragementPersonViewHolder.timeText.setText(DateUtil.getItemTime(datas.get(i).getPlanStartTime(),datas.get(i).getPlanEndTime()));
     }
 
     @Override
@@ -41,9 +43,11 @@ public class FragmentPersonRecycleViewAdapter extends RecyclerView.Adapter<Fragm
 
     public class FragementPersonViewHolder extends RecyclerView.ViewHolder{
         private TextView eventText;
+        private TextView timeText;
         public FragementPersonViewHolder(@NonNull View itemView) {
             super(itemView);
             eventText=itemView.findViewById(R.id.person_item_event_text);
+            timeText=itemView.findViewById(R.id.person_item_time);
         }
     }
 

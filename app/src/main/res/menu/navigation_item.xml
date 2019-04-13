@@ -7,5 +7,5 @@
     <item
         android:id="@+id/set"
         android:icon="@mipmap/baseline_settings_black_18dp"
-        android:title="设定"></item>
+        android:title="关于"></item>
 </menu>

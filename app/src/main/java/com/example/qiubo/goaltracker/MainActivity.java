@@ -2,6 +2,7 @@ package com.example.qiubo.goaltracker;
 
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import android.widget.SearchView;
 
 import com.example.qiubo.goaltracker.adapter.MainFragmentAdapter;
 import com.example.qiubo.goaltracker.model.DO.Event;
+import com.example.qiubo.goaltracker.util.StatusUtil;
 import com.example.qiubo.goaltracker.view.NoScrollViewPager;
 import com.example.qiubo.goaltracker.view.impl.DataFragment;
 import com.example.qiubo.goaltracker.view.impl.EventFragment;
@@ -32,7 +34,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,DataFragment.OnFragmentInteractionListener,EventFragment.OnFragmentInteractionListener,GroupFragment.OnFragmentInteractionListener,PersonFragment.OnFragmentInteractionListener{
    //Button button;
     TabLayout tableLayout;
-    final String PERSON= "个人",EVENT="事件",DATA="数据",GROUP="群体";
+    final String PERSON= "个人",EVENT="事件",DATA="日程",GROUP="数据";
     NoScrollViewPager viewPager;
     final String TAG = "Main Activity";
     @Override
@@ -41,7 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         //button=findViewById(R.id.button);
        // button.setOnClickListener(this);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            StatusUtil.setStatusBarColor(this,R.color.colorLucency);
+        }
         initView();
 //        List<Event>eventList=LitePal.findAll(Event.class);
 //        for (Event e:eventList){
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             viewPager=findViewById(R.id.main_pageview);
             viewPager.setScanScroll(false);
             tableLayout.addTab(tableLayout.newTab().setText(PERSON));
-            tableLayout.addTab(tableLayout.newTab().setText(GROUP));
+            tableLayout.addTab(tableLayout.newTab().setText(EVENT));
             tableLayout.addTab(tableLayout.newTab().setText(DATA));
             tableLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
@@ -80,13 +85,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragmentList.add(PersonFragment.newInstance("person","test"));
             fragmentList.add(EventFragment.newInstance("event","test"));
             fragmentList.add(DataFragment.newInstance("data","test"));
-            fragmentList.add(GroupFragment.newInstance("group","test"));
+           fragmentList.add(GroupFragment.newInstance("group","test"));
 
             List<String>titleList=new ArrayList<>();
             titleList.add(PERSON);
             titleList.add(EVENT);
             titleList.add(DATA);
-            titleList.add(GROUP);
+           titleList.add(GROUP);
 
             MainFragmentAdapter mainFragmentAdapter =new MainFragmentAdapter(getSupportFragmentManager(),fragmentList,titleList);
             //viewPager.setOffscreenPageLimit(4);

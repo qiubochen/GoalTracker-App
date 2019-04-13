@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -131,6 +132,19 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 return true;
             }
         });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.user:{
+                        Intent intent =new Intent(getActivity(),LoginActivity.class);
+                        startActivity(intent);
+                    };break;
+
+                }
+                return false;
+            }
+        });
         initToolbar();
         initNavigaitonView();
         return view;
@@ -144,6 +158,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         //该方法会自动和actionBar关联, 将开关的图片显示在了action上，如果不设置，也可以有抽屉的效果，不过是默认的图标
         mDrawerToggle.syncState();
         drawerLayout.addDrawerListener(mDrawerToggle);
+
     }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

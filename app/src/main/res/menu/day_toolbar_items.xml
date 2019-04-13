@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/day_three"
+        android:title="三日"
+        android:icon="@mipmap/baseline_settings_voice_white_18dp"
+        />
+
+    <item
+        android:id="@+id/day_five"
+        android:title="五日"
+        android:icon="@mipmap/baseline_settings_voice_white_18dp"
+       />
+    <item
+        android:id="@+id/day_seven"
+        android:title="七日"
+        android:icon="@mipmap/baseline_settings_voice_white_18dp"
+        />
+</menu>

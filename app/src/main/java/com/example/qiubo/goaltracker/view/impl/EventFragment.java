@@ -150,17 +150,22 @@ public class EventFragment extends Fragment implements OnDateSelectedListener,Vi
         int id=view.getId();
         switch (id){
             case  R.id.event_add:{
-                Intent intent=new Intent(getActivity(),NoteEventActivity.class);
 
-                List<String> labelList=new ArrayList<>();
-                for (CalendarDay calendarDay:calendarDayList){
-                    String s=calendarDay.getDate().toString();
-                    String[] itemList=s.split(" ");
-                    String label=itemList[1]+" "+itemList[2]+" "+itemList[5];
-                    labelList.add(label);
+                if (calendarDayList.size()==0){
+                    Toast.makeText(getActivity(),"你还没有选择日期哦",Toast.LENGTH_SHORT).show();
+                }else {
+
+                    List<String> labelList = new ArrayList<>();
+                    Intent intent = new Intent(getActivity(), NoteEventActivity.class);
+                    for (CalendarDay calendarDay : calendarDayList) {
+                        String s = calendarDay.getDate().toString();
+                        String[] itemList = s.split(" ");
+                        String label = itemList[1] + " " + itemList[2] + " " + itemList[5];
+                        labelList.add(label);
+                    }
+                    intent.putStringArrayListExtra("labelList", (ArrayList<String>) labelList);
+                    startActivity(intent);
                 }
-                intent.putStringArrayListExtra("labelList", (ArrayList<String>) labelList);
-                startActivity(intent);
             };break;
         }
     }
