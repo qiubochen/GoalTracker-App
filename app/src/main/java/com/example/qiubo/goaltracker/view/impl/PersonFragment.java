@@ -28,6 +28,7 @@ import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.adapter.FragmentPersonRecycleViewAdapter;
 import com.example.qiubo.goaltracker.model.DO.Event;
 import com.example.qiubo.goaltracker.service.AlarmService;
+import com.example.qiubo.goaltracker.util.DateUtil;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -330,6 +331,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
                 Event event=new Event();
                 event.setDone(true);
+                event.setCompleteTime(DateUtil.changeDateToString(DateUtil.getNowDate()));
                 //  System.out.println(datas.get(position).getDone()+" "+position+datas.get(position));
 
                 event.update(id);

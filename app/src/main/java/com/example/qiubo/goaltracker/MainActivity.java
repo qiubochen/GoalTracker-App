@@ -48,12 +48,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             StatusUtil.setStatusBarColor(this,R.color.colorLucency);
         }
         initView();
-//        List<Event>eventList=LitePal.findAll(Event.class);
-//        for (Event e:eventList){
-//            System.out.println(e.getEvent());
-//            System.out.println(e.getPlanStartTime());
-//            System.out.println(e.getDone());
-//        }
+        List<Event>eventList=LitePal.findAll(Event.class);
+        System.out.println("--=-=-");
+        for (Event e:eventList){
+            System.out.println(e.getEvent());
+            System.out.println(e.getPlanStartTime());
+            System.out.println(e.getDone());
+            System.out.println(e.getCompleteTime());
+        }
         //LitePal.deleteAll(Event.class);
     }
         void initView(){

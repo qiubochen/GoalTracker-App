@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.impl.GroupFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.github.mikephil.charting.charts.BarChart
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/main_tab_group" />
-
-</FrameLayout>
+        android:layout_height="300dp"
+        android:id="@+id/group_bar_chart_next_week"></com.github.mikephil.charting.charts.BarChart>
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/group_bar_chart_last_week"></com.github.mikephil.charting.charts.BarChart>
+</LinearLayout>
