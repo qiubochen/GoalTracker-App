@@ -6,6 +6,10 @@
         android:title="退出登录"/>
     <item
         android:id="@+id/set"
-        android:icon="@mipmap/baseline_settings_black_18dp"
+        android:icon="@mipmap/baseline_priority_high_black_18dp"
         android:title="关于"></item>
+    <item
+        android:icon="@mipmap/baseline_cached_black_18dp"
+        android:id="@+id/remorte"
+        android:title="数据同步"></item>
 </menu>

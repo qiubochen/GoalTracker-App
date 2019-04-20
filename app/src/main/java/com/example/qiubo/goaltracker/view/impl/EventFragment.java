@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.decorator.SelectedDecorator;
+import com.example.qiubo.goaltracker.util.DateUtil;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -91,7 +92,7 @@ public class EventFragment extends Fragment implements OnDateSelectedListener,Vi
         materialCalendarView=view.findViewById(R.id.event_calendarView);
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2015, 4, 3))
+                .setMinimumDate(CalendarDay.from(DateUtil.getNowDate().get(Calendar.YEAR), DateUtil.getNowDate().get(Calendar.MONTH), DateUtil.getNowDate().get(Calendar.DATE)))
                 .setMaximumDate(CalendarDay.from(2020, 5, 12))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();

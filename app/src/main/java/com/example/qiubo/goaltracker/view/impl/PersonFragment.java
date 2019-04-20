@@ -304,7 +304,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private OnItemClickListener mItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            Toast.makeText(getContext(), "第" + position + "个", Toast.LENGTH_SHORT).show();
+            Intent intent =new Intent(getActivity(),ChangeDataActivity.class);
+            intent.putExtra("Event",datas.get(position));
+            startActivity(intent);
         }
     };
     /**

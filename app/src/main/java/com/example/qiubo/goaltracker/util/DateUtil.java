@@ -26,6 +26,16 @@ public class DateUtil {
         System.out.println("----"+calendar.getTime());
         return calendar;
     }
+
+    public static Calendar changeStringToYMD(String TimeString) throws ParseException {
+        Calendar calendar=Calendar.getInstance();
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyyMMdd");
+        Date date=sdf.parse(TimeString);
+
+        calendar.setTime(date);
+        System.out.println("----"+calendar.getTime());
+        return calendar;
+    }
     public static String changeDateToString(Calendar calendar){
         SimpleDateFormat sdf= new SimpleDateFormat("yyyyMMddHHmm");
         String result=sdf.format(calendar.getTime());

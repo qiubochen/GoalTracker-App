@@ -15,4 +15,5 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:id="@+id/group_bar_chart_last_week"></com.github.mikephil.charting.charts.BarChart>
+
 </LinearLayout>

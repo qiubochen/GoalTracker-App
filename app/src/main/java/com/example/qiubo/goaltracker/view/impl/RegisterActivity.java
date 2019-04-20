@@ -1,9 +1,12 @@
 package com.example.qiubo.goaltracker.view.impl;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +19,7 @@ import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.model.BaseResult;
 import com.example.qiubo.goaltracker.model.DO.User;
 import com.example.qiubo.goaltracker.util.InternetRetrofit;
+import com.example.qiubo.goaltracker.util.StatusUtil;
 import com.example.qiubo.goaltracker.view.IRegisterView;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -30,20 +34,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegisterActivity extends AppCompatActivity implements IRegisterView, View.OnClickListener {
      Toolbar toolbar;
     ImageView backImageView;
-    EditText editName,editNickName,editPassword;
+    EditText editName,editNickName,editPassword,editConfirmPassword;
     Button registerButton;
+    ImageView imageViewVisable;
+    boolean showPassword;
     private final String TAG="Register";
-    private final String IPAdress="http://localhost/";
+    private final String IPAdress="http://39.108.227.213:8080/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            StatusUtil.setStatusBarColor(this,R.color.colorLucency);
+        }
         toolbar=(Toolbar)findViewById(R.id.login_main_toolbar);
         backImageView=findViewById(R.id.register_toolbar_imageView_back);
         editName=findViewById(R.id.register_editText_userName);
         editNickName=findViewById(R.id.register_editText_nickName);
         editPassword=findViewById(R.id.register_editText_password);
+        editConfirmPassword=findViewById(R.id.register_editText_confirm_password);
         registerButton=findViewById(R.id.register_button_register);
+        imageViewVisable=findViewById(R.id.register_image_visable);
+        imageViewVisable.setOnClickListener(this);
+        imageViewVisable.setImageDrawable(getResources().getDrawable(R.mipmap.cloaseeye48));
         backImageView.setOnClickListener(this);
         registerButton.setOnClickListener(this);
     }
@@ -56,12 +70,51 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
                 finish();
             };break;
             case R.id.register_button_register:{
+                if(editName.getText().toString().length()<=0){
+                    Toast.makeText(RegisterActivity.this,"手机号还没输入",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if(editNickName.getText().toString().length()<=0){
+                    Toast.makeText(RegisterActivity.this,"昵称还没输入",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if(editPassword.getText().toString().length()<=0){
+                    Toast.makeText(RegisterActivity.this,"手机号还没输入",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if(editConfirmPassword.getText().toString().length()<=0){
+                    Toast.makeText(RegisterActivity.this,"手机号还没输入",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                if (!editConfirmPassword.getText().toString().equals(editPassword.getText().toString())){
+                    Toast.makeText(RegisterActivity.this,"密码与确认密码不一致",Toast.LENGTH_SHORT).show();
+                    break;
+
+                }
                 User user=new User();
                 user.setNickName(editNickName.getText().toString());
                 user.setName(editName.getText().toString());
                 user.setPasword(editPassword.getText().toString());
 
                 postUser(user);
+            };break;
+            case R.id.register_image_visable:{
+                if (showPassword){
+                    imageViewVisable.setImageDrawable(getResources().getDrawable(R.mipmap.openeye48));
+                    editPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    editConfirmPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    editPassword.setSelection(editPassword.getText().toString().length());
+                    editConfirmPassword.setSelection(editConfirmPassword.getText().toString().length());
+                    showPassword=!showPassword;
+                }else {
+                    imageViewVisable.setImageDrawable(getResources().getDrawable(R.mipmap.cloaseeye48));
+                    editPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    editConfirmPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    editPassword.setSelection(editPassword.getText().toString().length());
+                    editConfirmPassword.setSelection(editConfirmPassword.getText().toString().length());
+                    showPassword=!showPassword;
+
+                }
             }
         }
     }
@@ -93,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
                         // 步骤8：对返回的数据进行处理
                         if (result.getCode().equals("200")){
 
-                            Intent intent=new Intent(RegisterActivity.this,LoginActivity.class);
+                            Intent intent=new Intent(RegisterActivity.this,VerifyActivity.class);
                             startActivity(intent);
 
                         }else {
@@ -104,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "请求失败");
+                        Log.d(TAG, "请求失败"+e.getMessage());
                     }
 
                     @Override

@@ -49,4 +49,23 @@ public class TextChange {
         result+=splitTime[1];
         return result;
     }
+
+    public static String setTime(String time){
+        String result;
+        result=time.substring(8,10);
+        result = result+":";
+        result+=time.substring(10,time.length());
+        return result;
+    }
+
+    public static String changeTagShow(String data){
+        String result;
+        result=data.substring(0,4);
+        result+="年";
+        result+=data.substring(4,6);
+        result+="月";
+        result+=data.substring(6,8);
+        result+="日";
+        return result;
+    }
 }
