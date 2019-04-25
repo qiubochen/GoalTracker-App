@@ -97,7 +97,7 @@ public class DataFragment extends Fragment  {
                 @NotNull
                 @Override
                 public List<WeekViewDisplayable<CalendarItem>> onMonthChange(Calendar calendar, Calendar calendar1) {
-                  return DataUtil.getDataList(calendar,calendar1);
+                  return DataUtil.getDataList(calendar,calendar1,getActivity());
                 }
 
             });

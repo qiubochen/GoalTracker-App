@@ -25,6 +25,7 @@ import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.model.DO.Event;
 import com.example.qiubo.goaltracker.model.DictationResult;
 import com.example.qiubo.goaltracker.util.DateUtil;
+import com.example.qiubo.goaltracker.util.SharedPreUtils;
 import com.example.qiubo.goaltracker.util.StatusUtil;
 import com.example.qiubo.goaltracker.util.TextChange;
 import com.google.gson.Gson;
@@ -65,6 +66,7 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
     private RecognizerDialog mIatDialog;
     Event event;
     private TagContainerLayout mTagContainerLayout;
+    private String contextUserId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +140,8 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
 //        });
 //        mTagContainerLayout.setTags(tagList);
 
+        SharedPreUtils sharedPreUtils=new SharedPreUtils(ChangeDataActivity.this);
+        contextUserId= (String) SharedPreUtils.get("userId",null);
 
         cardViewStart.setOnClickListener(this);
         cardViewEnd.setOnClickListener(this);
@@ -229,6 +233,11 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
                 eventTemp.setPlanStartTime(result+timeTemp);
                 timeTemp=getTime(textViewEnd.getText().toString());
                 eventTemp.setPlanEndTime(result+timeTemp);
+                if (contextUserId==null){
+                    eventTemp.setUserId(0L);
+                }else {
+                    eventTemp.setUserId(Long.valueOf(contextUserId));
+                }
                 eventTemp.save();
                 Intent intent = new Intent(ChangeDataActivity.this,MainActivity.class);
                 startActivity(intent);

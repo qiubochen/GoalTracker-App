@@ -9,21 +9,26 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.qiubo.goaltracker.MainActivity;
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.model.BaseResult;
 import com.example.qiubo.goaltracker.model.DO.User;
+import com.example.qiubo.goaltracker.model.ResponseUser;
 import com.example.qiubo.goaltracker.util.InternetRetrofit;
 import com.example.qiubo.goaltracker.util.StatusUtil;
 import com.example.qiubo.goaltracker.view.IRegisterView;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -93,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
                 }
                 User user=new User();
                 user.setNickName(editNickName.getText().toString());
-                user.setName(editName.getText().toString());
+                user.setUserName(editName.getText().toString());
                 user.setPasword(editPassword.getText().toString());
 
                 postUser(user);
@@ -145,12 +150,32 @@ public class RegisterActivity extends AppCompatActivity implements IRegisterView
                     public void onNext(BaseResult result) {
                         // 步骤8：对返回的数据进行处理
                         if (result.getCode().equals("200")){
-
+                            String s=JSONObject.toJSONString(result);
+                            JSONObject jsonObject=JSONObject.parseObject(s);
+                            ResponseUser responseUser=jsonObject.getObject("object",ResponseUser.class);
+                            String uuid=responseUser.getUuid();
                             Intent intent=new Intent(RegisterActivity.this,VerifyActivity.class);
+
+                            intent.putExtra("uuid",uuid);
                             startActivity(intent);
 
                         }else {
-                            Toast.makeText(RegisterActivity.this,result.getMsg(),Toast.LENGTH_SHORT).show();
+                            if (result.getCode().equals("1024")){
+                                Toast.makeText(RegisterActivity.this,"验证码输入次数过多",Toast.LENGTH_SHORT).show();
+
+                                return;
+                            }
+                            if (result.getCode().equals("1016")){
+                                Toast.makeText(RegisterActivity.this,"手机号码错误",Toast.LENGTH_SHORT).show();
+
+                                return;
+                            }
+                            if (result.getCode().equals("0002")){
+                                Toast.makeText(RegisterActivity.this,"用户名或昵称重复",Toast.LENGTH_SHORT).show();
+
+                                return;
+                            }
+                            Toast.makeText(RegisterActivity.this,"没有权限", Toast.LENGTH_SHORT).show();
                         }
 
                     }

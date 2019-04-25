@@ -13,7 +13,7 @@ public class User implements Serializable {
 
     private Long roleId;
 
-    private String name;
+    private String userName;
 
     private String pasword;
 
@@ -55,20 +55,20 @@ public class User implements Serializable {
         this.roleId = roleId;
     }
 
+
     /**
-     * @return name
+     * @return user_name
      */
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     /**
-     * @param name
+     * @param userName
      */
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
-
     /**
      * @return pasword
      */
@@ -127,7 +127,7 @@ public class User implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", roleId=").append(roleId);
-        sb.append(", name=").append(name);
+        sb.append(", name=").append(userName);
         sb.append(", pasword=").append(pasword);
         sb.append(", createTime=").append(createTime);
         sb.append(", destoryTime=").append(destoryTime);

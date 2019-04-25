@@ -31,7 +31,7 @@ public class Event extends LitePalSupport implements Serializable{
 
     private String completeTime;
 
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * @return id
@@ -174,7 +174,7 @@ public class Event extends LitePalSupport implements Serializable{
         sb.append(", planStartTime=").append(planStartTime);
         sb.append(", planEndTime=").append(planEndTime);
         sb.append(", completeTime=").append(completeTime);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
+
         sb.append("]");
         return sb.toString();
     }

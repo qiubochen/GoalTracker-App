@@ -1,5 +1,6 @@
 package com.example.qiubo.goaltracker;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -13,17 +14,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.qiubo.goaltracker.adapter.MainFragmentAdapter;
+import com.example.qiubo.goaltracker.model.BaseResult;
 import com.example.qiubo.goaltracker.model.DO.Event;
+import com.example.qiubo.goaltracker.model.DO.User;
+import com.example.qiubo.goaltracker.model.ResponseUser;
+import com.example.qiubo.goaltracker.util.InternetRetrofit;
+import com.example.qiubo.goaltracker.util.SharedPreUtils;
 import com.example.qiubo.goaltracker.util.StatusUtil;
 import com.example.qiubo.goaltracker.view.NoScrollViewPager;
 import com.example.qiubo.goaltracker.view.impl.DataFragment;
 import com.example.qiubo.goaltracker.view.impl.EventFragment;
 import com.example.qiubo.goaltracker.view.impl.GroupFragment;
 import com.example.qiubo.goaltracker.view.impl.PersonFragment;
+import com.example.qiubo.goaltracker.view.impl.RegisterActivity;
+import com.example.qiubo.goaltracker.view.impl.VerifyActivity;
+import com.google.gson.JsonObject;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.litepal.LitePal;
@@ -31,12 +44,22 @@ import org.litepal.LitePal;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,DataFragment.OnFragmentInteractionListener,EventFragment.OnFragmentInteractionListener,GroupFragment.OnFragmentInteractionListener,PersonFragment.OnFragmentInteractionListener{
    //Button button;
     TabLayout tableLayout;
     final String PERSON= "个人",EVENT="事件",DATA="日程",GROUP="数据";
     NoScrollViewPager viewPager;
     final String TAG = "Main Activity";
+    private final String IPAdress="http://39.108.227.213:8080/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             System.out.println(e.getDone());
             System.out.println(e.getCompleteTime());
         }
+
+
         //LitePal.deleteAll(Event.class);
     }
         void initView(){
@@ -132,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 
 
 }

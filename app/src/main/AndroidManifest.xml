@@ -61,7 +61,8 @@
             android:name=".view.impl.ChangeDataActivity"
             android:label="@string/title_activity_change_data"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.impl.VerifyActivity"></activity>
+        <activity android:name=".view.impl.VerifyActivity" />
+        <activity android:name=".view.impl.LoginVerifyActivity"></activity>
     </application>
 
 </manifest>

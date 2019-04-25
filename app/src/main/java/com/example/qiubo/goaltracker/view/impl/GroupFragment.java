@@ -61,7 +61,7 @@ public class GroupFragment extends Fragment {
     private Legend legend;              //图例
     private LimitLine limitLine;        //限制线
     private List<WeekBarItem>weekBarItemListNext,weekBarItemListLast;
-
+    private String contextUserId;
 
     private OnFragmentInteractionListener mListener;
 
@@ -101,6 +101,8 @@ public class GroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_group, container, false);
+        SharedPreUtils sharedPreUtils =new SharedPreUtils(getActivity());
+        contextUserId= (String) SharedPreUtils.get("userId",null);
         barChart=view.findViewById(R.id.group_bar_chart_next_week);
         lastWeekBarChart=view.findViewById(R.id.group_bar_chart_last_week);
 
@@ -116,6 +118,7 @@ public class GroupFragment extends Fragment {
 
         showBarChart(weekBarItemListLastWeek,"上周每日完成的数量",getResources().getColor(R.color.colorPrimary),lastWeekBarChart);
 
+
         return view;
     }
     private List<WeekBarItem> initDataNextWeek(){
@@ -127,8 +130,11 @@ public class GroupFragment extends Fragment {
             stringData=stringData.substring(0,8);
             WeekBarItem weekBarItem=new WeekBarItem();
 
-
-            weekBarItem.setValue(LitePal.where("planStartTime like ? and done = ?",stringData+"%","0").count(Event.class));
+            if (contextUserId==null) {
+                weekBarItem.setValue(LitePal.where("planStartTime like ? and done = ? and userId = ?", stringData + "%", "0","0").count(Event.class));
+            }else {
+                weekBarItem.setValue(LitePal.where("planStartTime like ? and done = ? and userId = ?", stringData + "%", "0",contextUserId).count(Event.class));
+            }
             stringData=stringData.substring(4,6)+"/"+stringData.substring(6,8);
             weekBarItem.setDay(stringData);
             weekBarItemListNext.add(weekBarItem);
@@ -144,8 +150,11 @@ public class GroupFragment extends Fragment {
             stringData=stringData.substring(0,8);
             WeekBarItem weekBarItem=new WeekBarItem();
 
-
-            weekBarItem.setValue(LitePal.where("completeTime like ? and done = ?",stringData+"%","1").count(Event.class));
+            if (contextUserId==null) {
+                weekBarItem.setValue(LitePal.where("completeTime like ? and done = ? and userId = ?", stringData + "%", "1","0").count(Event.class));
+            }else {
+                weekBarItem.setValue(LitePal.where("completeTime like ? and done = ? and userId = ?", stringData + "%", "1",contextUserId).count(Event.class));
+            }
             stringData=stringData.substring(4,6)+"/"+stringData.substring(6,8);
             weekBarItem.setDay(stringData);
             weekBarItemListLast.add(weekBarItem);

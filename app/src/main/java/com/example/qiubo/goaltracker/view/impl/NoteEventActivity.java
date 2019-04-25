@@ -24,8 +24,10 @@ import com.example.qiubo.goaltracker.MainActivity;
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.model.DO.Event;
 import com.example.qiubo.goaltracker.model.DictationResult;
+import com.example.qiubo.goaltracker.util.SharedPreUtils;
 import com.example.qiubo.goaltracker.util.StatusUtil;
 import com.example.qiubo.goaltracker.util.TextChange;
+import com.example.qiubo.goaltracker.util.UUIDUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.iflytek.cloud.ErrorCode;
@@ -60,6 +62,7 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
     FloatingActionButton buttonStart;
     // 语音听写UI
     private RecognizerDialog mIatDialog;
+    private String contextUserId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +72,9 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
             getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             StatusUtil.setStatusBarColor(this,R.color.colorLucency);
         }
+
+        SharedPreUtils sharedPreUtils=new SharedPreUtils(NoteEventActivity.this);
+       contextUserId= (String) SharedPreUtils.get("userId",null);
 
         //防止输入法顶起控件
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -181,6 +187,12 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
                   editText=mEditor.getHtml();
                   event.setEvent(editText);
                   event.setDone(false);
+                  event.setUuid(UUIDUtil.getUUID());
+                  if (contextUserId==null){
+                      event.setUserId(0L);
+                  }else {
+                      event.setUserId(Long.valueOf(contextUserId));
+                  }
                   eventList.add(event);
               }
                LitePal.saveAll(eventList);

@@ -1,5 +1,11 @@
 package com.example.qiubo.goaltracker.util;
 
+import android.content.ContentValues;
+
+import com.example.qiubo.goaltracker.model.DO.Event;
+
+import org.litepal.LitePal;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,6 +85,15 @@ public class DateUtil {
 
 
 
+    }
+
+    public static void changeUserId(String userId){
+        ContentValues values=new ContentValues();
+        values.put("userId",userId);
+        LitePal.updateAll(Event.class,values,"userId = ?", "0");
+    }
+    public static void deleteOtherUserEvent(String userId){
+        LitePal.deleteAll(Event.class,"userId != ?",userId);
     }
 }
 

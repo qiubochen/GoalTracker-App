@@ -3,9 +3,11 @@ package com.example.qiubo.goaltracker.view.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -21,14 +23,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.example.qiubo.goaltracker.MainActivity;
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.adapter.FragmentPersonRecycleViewAdapter;
+import com.example.qiubo.goaltracker.model.BaseResult;
 import com.example.qiubo.goaltracker.model.DO.Event;
+import com.example.qiubo.goaltracker.model.DO.User;
 import com.example.qiubo.goaltracker.service.AlarmService;
 import com.example.qiubo.goaltracker.util.DateUtil;
+import com.example.qiubo.goaltracker.util.InternetRetrofit;
+import com.example.qiubo.goaltracker.util.SharedPreUtils;
+import com.google.gson.JsonArray;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
@@ -40,7 +52,17 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import org.litepal.LitePal;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +92,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private List<Event>datas;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private TextView textViewNickName;
+    private final String IPAdress="http://39.108.227.213:8080/";
+    private String contextUserId;
     public PersonFragment() {
         // Required empty public constructor
     }
@@ -108,28 +133,41 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_person, container, false);
-        //userImageView=view.findViewById(R.id.person_user);
-        //userImageView.setOnClickListener(this);
+
         toolbar=view.findViewById(R.id.fragment_person_toolbar);
         swipeRecyclerView=view.findViewById(R.id.fragment_person_recycle_view);
         swipeRefreshLayout=view.findViewById(R.id.person_refresh_layout);
         navigationView=view.findViewById(R.id.person_navigation_view);
         drawerLayout=view.findViewById(R.id.person_drawer_layout);
+
         searchView = (MaterialSearchView) view.findViewById(R.id.fragment_person_search_view);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextSubmit(String query) {
                 datas.clear();
-                datas.addAll(LitePal.where("event like ? and done = ?","%"+query+"%","0").find(Event.class));
+                if (contextUserId==null) {
+                    datas.addAll(LitePal.where("event like ? and done = ? and userId = ?", "%" + query + "%", "0", "0").find(Event.class));
+
+                }else {
+                    datas.addAll(LitePal.where("event like ? and done = ? and userId = ?", "%" + query + "%", "0", contextUserId).find(Event.class));
+                }
+                //datas= datas.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
                 loadData();
                 return true;
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextChange(String newText) {
-                datas.clear();
-                datas.addAll(LitePal.where("event like ? and done = ?","%"+newText+"%","0").find(Event.class));
-                loadData();
+//                datas.clear();
+//                if (contextUserId==null) {
+//                    datas.addAll(LitePal.where("event like ? and done = ? and userId = ?", "%" + newText + "%", "0", "0").find(Event.class));
+//                }else {
+//                    datas.addAll(LitePal.where("event like ? and done = ? and userId = ?", "%" + newText + "%", "0", contextUserId).find(Event.class));
+//                }
+//                datas= datas.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
+//                loadData();
                 return true;
             }
         });
@@ -146,9 +184,27 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                 return false;
             }
         });
+
+        SharedPreUtils sharedPreUtils=new SharedPreUtils(getActivity());
+        contextUserId= (String) SharedPreUtils.get("userId",null);
         initToolbar();
         initNavigaitonView();
+        initHeaderNickName(getActivity());
         return view;
+    }
+
+    void initHeaderNickName(Context context){
+
+        View navigationViewHeader=navigationView.getHeaderView(0);
+        textViewNickName=navigationViewHeader.findViewById(R.id.header_nick_name);
+
+        SharedPreUtils sharedPreUtils=new SharedPreUtils(getActivity());
+        String s= (String) SharedPreUtils.get("nickName",null);
+
+        if (s!=null){
+            textViewNickName.setText(s);
+
+        }
     }
 
     private void initNavigaitonView(){
@@ -161,6 +217,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         drawerLayout.addDrawerListener(mDrawerToggle);
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -196,10 +253,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         int id=view.getId();
         switch (id){
-//            case R.id.person_user:{
-//                Intent intent=new Intent(getActivity(),LoginActivity.class);
-//                startActivity(intent);
-//            };break;
+
         }
     }
 
@@ -214,21 +268,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         //setSearchView(searchView);
 
     }
-//    private void setSearchView(MaterialSearchView materialSearchView){
-//        materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                return true;
-//            }
-//        });
-//    }
+
     private  void initToolbar() {
         toolbar.setTitle("");
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -237,6 +277,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     /**
      * 创建recycleview
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initRecycleView(){
         swipeRecyclerView.setOnItemClickListener(mItemClickListener);
         swipeRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -252,9 +293,15 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
      * 获取recycleview的列表数据
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private List<Event> initdata(){
-        List<Event> datasTemp=LitePal.where("done = ?","0").find(Event.class);
-
+        List<Event> datasTemp;
+        if (contextUserId==null) {
+           datasTemp = LitePal.where("done = ? and userId = ?", "0","0").find(Event.class);
+        }else {
+            datasTemp=LitePal.where("done = ? and userId = ?","0",contextUserId).find(Event.class);
+        }
+        datasTemp= datasTemp.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
         return datasTemp;
     }
     /**
@@ -291,11 +338,19 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
      * 刷新的事件
      */
     private SwipeRefreshLayout.OnRefreshListener mRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onRefresh() {
             datas.clear();
             datas.addAll(initdata());
            loadData();
+
+
+            if (contextUserId!=null){
+                List<Event>eventList=LitePal.findAll(Event.class);
+                initEventData();
+
+            }
         }
     };
     /**
@@ -375,4 +430,116 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
         }
     };
+
+    void initEventData(){
+        //步骤4：创建Retrofit对象
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IPAdress) // 设置 网络请求 Url
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 支持RxJava
+                .build();
+
+        // 步骤5：创建 网络请求接口 的实例
+        final InternetRetrofit request = retrofit.create(InternetRetrofit.class);
+
+        // 步骤6：采用Observable<...>形式 对 网络请求 进行封装
+        final User user=new User();
+
+
+        user.setId(Long.valueOf(contextUserId));
+        //Observable<BaseResult> observable = request.getAllEvent(user);
+
+        Observable<BaseResult> observableGeTAllEvent=request.getAllEvent(user);
+
+
+
+        observableGeTAllEvent.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BaseResult>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseResult value) {
+                        String s=JSONObject.toJSONString(value);
+                        JSONObject jsonObject=JSONObject.parseObject(s);
+                        JSONArray jsonArray=jsonObject.getJSONArray("object");
+                        String js=JSONObject.toJSONString(jsonArray);
+                        List<Event>eventList=JSONObject.parseArray(js,Event.class);
+                        List<Event>phoneEventList=LitePal.findAll(Event.class);
+                        for (Event event:eventList){
+                            boolean f=true;
+                            for (Event eventPhone:phoneEventList){
+                                if (event.getUuid().equals(eventPhone.getUuid())){
+                                    f=false;
+                                    break;
+                                }
+                            }
+                            if (f){
+                                event.save();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        List<Event> eventList = LitePal.where("userId = ?",contextUserId).find(Event.class);
+
+        remoteData(eventList);
+
+    }
+
+    void remoteData(List<Event>eventList){
+
+        System.out.println(JSONObject.toJSONString(eventList));
+
+
+        //步骤4：创建Retrofit对象
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(IPAdress) // 设置 网络请求 Url
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 支持RxJava
+                .build();
+
+        // 步骤5：创建 网络请求接口 的实例
+        final InternetRetrofit request = retrofit.create(InternetRetrofit.class);
+        Observable<BaseResult>observable=request.remote(eventList);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BaseResult>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BaseResult value) {
+//                       Toast.makeText(getActivity(),"更新成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"上传数据成功",Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
 }
