@@ -95,5 +95,10 @@ public class DateUtil {
     public static void deleteOtherUserEvent(String userId){
         LitePal.deleteAll(Event.class,"userId != ?",userId);
     }
+
+    public static long getTimeDifference(Calendar start,Calendar end){
+            long differenceTime=start.getTimeInMillis() -end.getTimeInMillis();
+            return differenceTime;
+    }
 }
 

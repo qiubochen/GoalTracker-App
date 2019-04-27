@@ -3,7 +3,9 @@ package com.example.qiubo.goaltracker.view.impl;
 import android.content.Context;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -94,6 +96,7 @@ public class DataFragment extends Fragment  {
         toolbar=view.findViewById(R.id.data_toolbar);
         if (weekView!=null){
             weekView.setMonthChangeListener(new MonthChangeListener<CalendarItem>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @NotNull
                 @Override
                 public List<WeekViewDisplayable<CalendarItem>> onMonthChange(Calendar calendar, Calendar calendar1) {

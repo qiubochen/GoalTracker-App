@@ -1,11 +1,13 @@
 package com.example.qiubo.goaltracker.receiver;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -17,6 +19,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.provider.AlarmClock;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -27,12 +32,14 @@ import com.example.qiubo.goaltracker.MainActivity;
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.service.AlarmService;
 import com.example.qiubo.goaltracker.util.SharedPreUtils;
+import com.example.qiubo.goaltracker.view.impl.AlarmDialogActivity;
 
 import java.io.File;
 import java.io.IOException;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.support.v4.content.ContextCompat.getSystemService;
+import static android.support.v4.content.ContextCompat.startActivity;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -59,8 +66,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 //        final AlertDialog dialog = builder.create();
 //        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 //        dialog.show();
+        // 获得广播发送的数据
 
         Log.i("AlarmReceiver","闹钟响了");
+
 
 //        String id = "my_channel_01";
 //        String name="我是渠道名字";
@@ -96,6 +105,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel(id, des, NotificationManager.IMPORTANCE_HIGH);
+                Vibrator v;
+                v=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(new long[]{0,1000,1000,1000},-1 );
+
+
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                 notificationManager.createNotificationChannel(channel);
                 notification = new Notification.Builder(context, id)
@@ -116,7 +130,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                 // .setChancnel(id);//无效
                 notification = notificationBuilder.build();
             }
+//            Intent alarm = new Intent(context,AlarmDialogActivity.class);
+//            context.startActivity(alarm);
             System.out.println("AlarmReceiver的提醒");
+
 
 
     }

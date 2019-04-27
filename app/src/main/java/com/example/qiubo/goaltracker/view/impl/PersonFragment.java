@@ -2,6 +2,7 @@ package com.example.qiubo.goaltracker.view.impl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -373,13 +374,20 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             menuBridge.closeMenu();
 
            int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-//            int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+           int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
             if (direction==SwipeRecyclerView.RIGHT_DIRECTION){
-                Intent intentService=new Intent(getActivity(),AlarmService.class);
-                intentService.putExtra("event",datas.get(position).getEvent());
-                getActivity().startService(intentService);
-                Toast.makeText(getActivity(),"闹钟已提醒",Toast.LENGTH_LONG).show();
+
+                if (menuPosition==0) {
+                    Intent intentService = new Intent(getActivity(), AlarmService.class);
+                    intentService.putExtra("event", datas.get(position).getEvent());
+                    getActivity().startService(intentService);
+                    Toast.makeText(getActivity(), "闹钟已提醒", Toast.LENGTH_LONG).show();
+                }else {
+                    Intent intent=new Intent(getActivity(),AlarmDialogActivity.class);
+                    intent.putExtra("event",datas.get(position));
+                    startActivity(intent);
+                }
 
             }else if (direction == SwipeRecyclerView.LEFT_DIRECTION){
                 long id=datas.get(position).getId();
@@ -418,15 +426,26 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
 
             SwipeMenuItem addItem = new SwipeMenuItem(getContext())
                     .setImage(R.mipmap.baseline_done_black_18dp)
-                    .setWidth(120)
+                    .setWidth(150)
+                    //.setBackgroundColor(Color.RED)
                     .setHeight(height);
             swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
             SwipeMenuItem addAlarm = new SwipeMenuItem(getContext())
                     .setImage(R.mipmap.baseline_alarm_add_black_18dp)
-                    .setWidth(120)
+                    //.setBackgroundColor(Color.RED)
+                    .setWidth(150)
                     .setHeight(height);
             swipeRightMenu.addMenuItem(addAlarm);
+
+            SwipeMenuItem workItem = new SwipeMenuItem(getContext())
+                    .setImage(R.mipmap.baseline_hourglass_empty_black_18dp)
+                   // .setBackgroundColor(Color.GREEN)
+                    .setWidth(150)
+                    .setHeight(height);
+
+
+            swipeRightMenu.addMenuItem(workItem);
 
         }
     };

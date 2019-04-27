@@ -20,7 +20,7 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+       // AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         //读者可以修改此处的Minutes从而改变提醒间隔时间
         //此处是设置每隔90分钟启动一次
         //这是90分钟的毫秒数

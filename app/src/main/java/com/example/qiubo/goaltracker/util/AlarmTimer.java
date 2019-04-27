@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.example.qiubo.goaltracker.receiver.AlarmReceiver;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -61,7 +62,11 @@ public class AlarmTimer {
         sharedPreUtils.put("alarm_id", ++alarmId);
         PendingIntent sender = PendingIntent.getBroadcast(context, alarmId, myIntent, 0);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.set(AlarmManagerType, cycTime, sender);
+        //alarm.set(AlarmManagerType, cycTime, sender);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarm.setWindow(AlarmManager.ELAPSED_REALTIME_WAKEUP, cycTime, 1000, sender);
+        }
     }
 
     /**
