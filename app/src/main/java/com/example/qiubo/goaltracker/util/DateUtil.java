@@ -1,6 +1,7 @@
 package com.example.qiubo.goaltracker.util;
 
 import android.content.ContentValues;
+import android.os.SystemClock;
 
 import com.example.qiubo.goaltracker.model.DO.Event;
 
@@ -99,6 +100,11 @@ public class DateUtil {
     public static long getTimeDifference(Calendar start,Calendar end){
             long differenceTime=start.getTimeInMillis() -end.getTimeInMillis();
             return differenceTime;
+    }
+
+    // 返回开机时间，单位微妙
+    public static long getBootTime() {
+        return System.currentTimeMillis() - SystemClock.elapsedRealtime();
     }
 }
 

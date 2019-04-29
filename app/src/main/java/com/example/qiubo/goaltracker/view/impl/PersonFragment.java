@@ -1,9 +1,12 @@
 package com.example.qiubo.goaltracker.view.impl;
 
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 
@@ -53,7 +57,10 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 import org.litepal.LitePal;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -379,10 +386,42 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             if (direction==SwipeRecyclerView.RIGHT_DIRECTION){
 
                 if (menuPosition==0) {
-                    Intent intentService = new Intent(getActivity(), AlarmService.class);
-                    intentService.putExtra("event", datas.get(position).getEvent());
-                    getActivity().startService(intentService);
-                    Toast.makeText(getActivity(), "闹钟已提醒", Toast.LENGTH_LONG).show();
+                       TimePickerDialog timePickerDialog= new TimePickerDialog(getActivity(),AlertDialog.THEME_HOLO_LIGHT, new TimePickerDialog.OnTimeSetListener() {
+                           @Override
+                           public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+
+                               Calendar calendar=null;
+                               try {
+                                   calendar=DateUtil.changeStringToDate(datas.get(position).getPlanStartTime());
+                               } catch (ParseException e) {
+                                   e.printStackTrace();
+                               }
+                               long time=calendar.getTimeInMillis();
+                               System.out.println("PersonFragment"+time);
+
+                               long timeDifference=(hourOfDay*3600+minutes*60)*1000;
+                               time=time-timeDifference;
+                               if (time<System.currentTimeMillis()){
+                                   Toast.makeText(getActivity(),"提醒时间比当前时间早了",Toast.LENGTH_SHORT).show();
+                                   return;
+                               }
+
+                               Intent intentService = new Intent(getActivity(), AlarmService.class);
+                               intentService.putExtra("event", datas.get(position).getEvent());
+                               intentService.putExtra("time",time-DateUtil.getBootTime());
+                               getActivity().startService(intentService);
+                               Toast.makeText(getActivity(), "闹钟已提醒", Toast.LENGTH_LONG).show();
+                           }
+                       }, 0, 15, true);
+
+                       timePickerDialog.setTitle("提前分钟提醒");
+                          timePickerDialog.show();
+
+
+
+
+
+
                 }else {
                     Intent intent=new Intent(getActivity(),AlarmDialogActivity.class);
                     intent.putExtra("event",datas.get(position));

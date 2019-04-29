@@ -26,7 +26,9 @@ public class AlarmService extends Service {
         //这是90分钟的毫秒数
         int Minutes = 1*20*1000;
         //SystemClock.elapsedRealtime()表示1970年1月1日0点至今所经历的时间
-        long triggerAtTime = SystemClock.elapsedRealtime() + Minutes;
+        long triggerAtTim = SystemClock.elapsedRealtime() + Minutes;
+        System.out.println(triggerAtTim);
+        long triggerAtTime=intent.getLongExtra("time",0L);
 //        //此处设置开启AlarmReceiver这个Service
 //        Intent i = new Intent(this, AlarmReceiver.class);
 //        PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
