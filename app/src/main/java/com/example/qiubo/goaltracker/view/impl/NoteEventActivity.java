@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -63,6 +64,10 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
     // 语音听写UI
     private RecognizerDialog mIatDialog;
     private String contextUserId;
+    private RadioGroup radioGroup;
+    private final String Tag="NoteEventActivity";
+    private String level="1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +80,7 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
 
         SharedPreUtils sharedPreUtils=new SharedPreUtils(NoteEventActivity.this);
        contextUserId= (String) SharedPreUtils.get("userId",null);
-
+        radioGroup=findViewById(R.id.note_event_level_group);
         //防止输入法顶起控件
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SpeechUtility.createUtility(this,SpeechConstant.APPID +"=5c9cff16");
@@ -112,6 +117,23 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
          */
         TagContainerLayout mTagContainerLayout = (TagContainerLayout) findViewById(R.id.note_event_tags);
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.note_event_level_normal:{
+                        level="1";
+                    };break;
+                    case R.id.note_event_level_important:{
+                        level="2";
+                    };break;
+                    case R.id.note_event_level_very_important:{
+                        level="3";
+                    };break;
+                }
+            }
+
+        });
         mTagContainerLayout.setTags(tagList);
 
         cardViewStart.setOnClickListener(this);
@@ -192,6 +214,18 @@ public class NoteEventActivity extends AppCompatActivity implements View.OnClick
                       event.setUserId(0L);
                   }else {
                       event.setUserId(Long.valueOf(contextUserId));
+                  }
+                  if ("1".equals(level)){
+                      event.setLevel(level);
+                      System.out.println(Tag+" "+level);
+                  }
+                  if ("2".equals(level)){
+                      event.setLevel(level);
+                      System.out.println(Tag+" "+level);
+                  }
+                  if ("3".equals(level)){
+                      event.setLevel(level);
+                      System.out.println(Tag+" "+level);
                   }
                   eventList.add(event);
               }

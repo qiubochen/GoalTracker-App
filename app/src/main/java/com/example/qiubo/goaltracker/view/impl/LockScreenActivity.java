@@ -2,6 +2,7 @@ package com.example.qiubo.goaltracker.view.impl;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.qiubo.goaltracker.R;
 import com.example.qiubo.goaltracker.model.DO.Event;
+import com.example.qiubo.goaltracker.receiver.HomeReceiver;
 import com.example.qiubo.goaltracker.receiver.ScreenOffAdminReceiver;
 import com.example.qiubo.goaltracker.service.LockService;
 import com.example.qiubo.goaltracker.util.SharedPreUtils;
@@ -29,6 +31,7 @@ public class LockScreenActivity extends AppCompatActivity implements View.OnClic
     long eventId;
     Button stopButton;
     CountDownTimer timer;
+    HomeReceiver innerReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,8 @@ public class LockScreenActivity extends AppCompatActivity implements View.OnClic
             getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             StatusUtil.setStatusBarColor(this,R.color.colorLucency);
         }
+
+
         this.getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -54,6 +59,9 @@ public class LockScreenActivity extends AppCompatActivity implements View.OnClic
         long timeStamp=(Integer.valueOf(sHour)*60*60+Integer.valueOf(sMinute)*60);
         startCountDownTime(timeStamp);
         eventTextView.setText(s);
+        innerReceiver = new HomeReceiver();                                                        //注册广播
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        registerReceiver(innerReceiver, intentFilter);
     }
 
     private void startCountDownTime(long time) {
@@ -85,6 +93,8 @@ public class LockScreenActivity extends AppCompatActivity implements View.OnClic
                 LitePal.update(Event.class,values,eventId);
                 Intent intent=new Intent(LockScreenActivity.this,LockService.class);
                 stopService(intent);
+                unregisterReceiver(innerReceiver);                                             //取消注册
+
                 finish();
                 Log.d(TAG, "onFinish -- 倒计时结束");
 
@@ -96,6 +106,18 @@ public class LockScreenActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(innerReceiver);
+        super.onDestroy();
     }
 
     @Override

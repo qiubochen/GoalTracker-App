@@ -5,11 +5,11 @@
         android:icon="@mipmap/outline_perm_identity_black_18dp"
         android:title="退出登录"/>
     <item
-        android:id="@+id/set"
-        android:icon="@mipmap/baseline_priority_high_black_18dp"
-        android:title="关于"></item>
+    android:icon="@mipmap/baseline_arrow_upward_black_18dp"
+    android:id="@+id/time_sort"
+    android:title="关于时间排序"></item>
     <item
-        android:icon="@mipmap/baseline_cached_black_18dp"
-        android:id="@+id/remorte"
-        android:title="数据同步"></item>
+        android:icon="@mipmap/baseline_arrow_upward_black_18dp"
+        android:id="@+id/level_sort"
+        android:title="关于等级排序"></item>
 </menu>

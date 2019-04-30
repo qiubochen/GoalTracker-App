@@ -31,7 +31,20 @@ public class Event extends LitePalSupport implements Serializable{
 
     private String completeTime;
 
+    /*
+    1为一般
+    2为重要
+    3为紧急
+     */
+    private String level="1";
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     /**
      * @return id

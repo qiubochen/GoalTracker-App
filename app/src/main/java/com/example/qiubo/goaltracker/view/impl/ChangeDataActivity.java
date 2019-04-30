@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -67,6 +69,9 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
     Event event;
     private TagContainerLayout mTagContainerLayout;
     private String contextUserId;
+    private RadioGroup radioGroup;
+    private RadioButton noramalRadioButton,importantRadioButton,busyRadioButton;
+    private String level="1";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +94,10 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
         textViewSave=findViewById(R.id.change_data_text_view_save);
         buttonStart=findViewById(R.id.change_data_voice);
         textViewDate=findViewById(R.id.change_data_date);
+        radioGroup=findViewById(R.id.change_data_level_group);
+        noramalRadioButton=findViewById(R.id.change_data_level_normal);
+        importantRadioButton=findViewById(R.id.change_data_level_important);
+        busyRadioButton=findViewById(R.id.change_data_level_very_important);
         linearLayoutDate=findViewById(R.id.data_change_date_linear_layout_date);
         /**
          * 富文本編輯機器編輯
@@ -106,40 +115,34 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
                 editText=text;
             }
         });
-        //mEditor.setInputEnabled(false);
-        /**
-         * 获取tag标签
-         */
-//        Intent intent=getIntent();
-//        tagList =intent.getStringArrayListExtra("labelList");
-//        /**
-//         * 绘制taglayout
-//         */
 
 
-//        tagList=new ArrayList<>();
-//        tagList.add(TextChange.changeTagShow(event.getPlanStartTime()));
-//        mTagContainerLayout = (TagContainerLayout) findViewById(R.id.change_data_tags);
-//        //mTagContainerLayout.setIsTagViewClickable(true);
-//        mTagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
-//            @Override
-//            public void onTagClick(int position, String text) {
-//                Toast.makeText(ChangeDataActivity.this, "click-position:" + position + ", text:" + text,
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onTagLongClick(int position, String text) {
-//
-//            }
-//
-//            @Override
-//            public void onTagCrossClick(int position) {
-//
-//            }
-//        });
-//        mTagContainerLayout.setTags(tagList);
-
+        level=event.getLevel();
+        if ("1".equals(level)){
+            noramalRadioButton.setChecked(true);
+        }
+        if ("2".equals(level)){
+            importantRadioButton.setChecked(true);
+        }
+        if ("3".equals(level)){
+            busyRadioButton.setChecked(true);
+        }
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.change_data_level_normal:{
+                        level="1";
+                    };break;
+                    case R.id.change_data_level_important:{
+                        level="2";
+                    };break;
+                    case R.id.change_data_level_very_important:{
+                        level="3";
+                    };break;
+                }
+            }
+        });
         SharedPreUtils sharedPreUtils=new SharedPreUtils(ChangeDataActivity.this);
         contextUserId= (String) SharedPreUtils.get("userId",null);
 
@@ -237,6 +240,18 @@ public class ChangeDataActivity extends AppCompatActivity implements View.OnClic
                     eventTemp.setUserId(0L);
                 }else {
                     eventTemp.setUserId(Long.valueOf(contextUserId));
+                }
+                if ("1".equals(level)){
+                    eventTemp.setLevel(level);
+
+                }
+                if ("2".equals(level)){
+                    eventTemp.setLevel(level);
+
+                }
+                if ("3".equals(level)){
+                    eventTemp.setLevel(level);
+
                 }
                 eventTemp.save();
                 Intent intent = new Intent(ChangeDataActivity.this,MainActivity.class);

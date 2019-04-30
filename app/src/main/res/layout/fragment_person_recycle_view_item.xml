@@ -24,7 +24,7 @@
 
            <LinearLayout
                android:layout_width="wrap_content"
-               android:layout_height="80sp"
+               android:layout_height="65sp"
                android:layout_marginBottom="5sp"
                >
             <TextView
@@ -36,16 +36,39 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
                 <TextView
-                android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+
                     android:id="@+id/person_item_time"
                 android:text="三月28日 早上九点"
                 android:textSize="10sp"
                     android:layout_marginLeft="10sp"
+                    android:layout_marginTop="15dp"
                 />
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+                    <ImageView
+                        android:id="@+id/person_item_imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginTop="15dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

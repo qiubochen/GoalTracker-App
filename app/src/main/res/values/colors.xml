@@ -11,4 +11,7 @@
 <color name="colorGreenItem">#00DB00</color>
     <color name="colorRedItem">#D81B60</color>
     <color name="colorRed">	#FF0000</color>
+    <color name="colorNormal">#9AFF02</color>
+    <color name="colorImportant">#FFFF6F</color>
+    <color name="colorBusy">#FF2D2D</color>
 </resources>

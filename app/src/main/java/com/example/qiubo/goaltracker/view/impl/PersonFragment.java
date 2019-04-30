@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -89,6 +91,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private final String Tag="PersonFragment";
 
     private OnFragmentInteractionListener mListener;
     private ImageView userImageView,refreshImageView;
@@ -103,6 +106,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
     private TextView textViewNickName;
     private final String IPAdress="http://39.108.227.213:8080/";
     private String contextUserId;
+
     public PersonFragment() {
         // Required empty public constructor
     }
@@ -149,6 +153,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         drawerLayout=view.findViewById(R.id.person_drawer_layout);
 
         searchView = (MaterialSearchView) view.findViewById(R.id.fragment_person_search_view);
+
+
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -168,33 +174,47 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onQueryTextChange(String newText) {
-//                datas.clear();
-//                if (contextUserId==null) {
-//                    datas.addAll(LitePal.where("event like ? and done = ? and userId = ?", "%" + newText + "%", "0", "0").find(Event.class));
-//                }else {
-//                    datas.addAll(LitePal.where("event like ? and done = ? and userId = ?", "%" + newText + "%", "0", contextUserId).find(Event.class));
-//                }
-//                datas= datas.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
-//                loadData();
+
                 return true;
             }
         });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                SharedPreUtils sharedPreUtils=new SharedPreUtils(getActivity());
                 switch (menuItem.getItemId()){
                     case R.id.user:{
                         Intent intent =new Intent(getActivity(),LoginActivity.class);
                         startActivity(intent);
                     };break;
 
+                    case R.id.time_sort:{
+                       SharedPreUtils.put("sort","1");
+                       drawerLayout.closeDrawer(GravityCompat.START);
+                        datas.clear();
+                        datas.addAll(initdata());
+                        loadData();
+
+                    };break;
+                    case R.id.level_sort:{
+                        SharedPreUtils.put("sort","2");
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        datas.clear();
+                        datas.addAll(initdata());
+                        loadData();
+
+                    };break;
                 }
                 return false;
             }
         });
 
+
+
         SharedPreUtils sharedPreUtils=new SharedPreUtils(getActivity());
         contextUserId= (String) SharedPreUtils.get("userId",null);
+        SharedPreUtils.put("sort","1");
         initToolbar();
         initNavigaitonView();
         initHeaderNickName(getActivity());
@@ -309,7 +329,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
         }else {
             datasTemp=LitePal.where("done = ? and userId = ?","0",contextUserId).find(Event.class);
         }
-        datasTemp= datasTemp.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
+        SharedPreUtils sharedPreUtils=new SharedPreUtils(getActivity());
+        String sortKind= (String) SharedPreUtils.get("sort","1");
+        if ("1".equals(sortKind)) {
+            datasTemp = datasTemp.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
+        }else {
+            datasTemp=datasTemp.stream().sorted(Comparator.comparing(Event::getLevel).reversed()).collect(Collectors.toList());
+        }
         return datasTemp;
     }
     /**

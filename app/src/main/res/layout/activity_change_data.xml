@@ -223,7 +223,35 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="事件紧急程度"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"/>
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/change_data_level_group">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="一般"
+            android:checked="true"
+            android:id="@+id/change_data_level_normal"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重要"
+            android:id="@+id/change_data_level_important"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="紧急"
+            android:id="@+id/change_data_level_very_important"/>
+    </RadioGroup>
     <!--<co.lujun.androidtagview.TagContainerLayout-->
         <!--android:id="@+id/change_data_tags"-->
         <!--android:layout_width="wrap_content"-->
