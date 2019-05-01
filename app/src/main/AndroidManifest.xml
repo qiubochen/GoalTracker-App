@@ -34,8 +34,6 @@
     <uses-permission android:name="android.permission.USES_POLICY_FORCE_LOCK" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-
-
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
@@ -102,7 +100,9 @@
         <service
             android:name=".service.HomeService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".view.impl.TrashActivity"></activity>
     </application>
 
 </manifest>

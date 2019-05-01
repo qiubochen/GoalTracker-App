@@ -205,6 +205,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener{
                         loadData();
 
                     };break;
+
+                    case R.id.trash_bin:{
+                        Intent intent=new Intent(getActivity(),TrashActivity.class);
+                        startActivity(intent);
+                    };break;
                 }
                 return false;
             }

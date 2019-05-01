@@ -256,7 +256,7 @@ public class GroupFragment extends Fragment {
         }
 
         //设置数据
-        setData(entries);
+        setData(entries,normal,important,busy);
 
         //默认动画
       //  mPieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
@@ -270,16 +270,21 @@ public class GroupFragment extends Fragment {
 
     }
     //设置数据
-    private void setData(ArrayList<PieEntry> entries) {
+    private void setData(ArrayList<PieEntry> entries,int normal,int important,int busy) {
         PieDataSet dataSet = new PieDataSet(entries, "重要性数据");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         //dataSet.setValueTextColor(Color.BLACK);
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        colors.add(getResources().getColor(R.color.colorNormal));
-        colors.add(getResources().getColor(R.color.colorImportant));
-        colors.add(getResources().getColor(R.color.colorBusy));
-
+        if (normal!=0) {
+            colors.add(getResources().getColor(R.color.colorNormal));
+        }
+        if (important!=0) {
+            colors.add(getResources().getColor(R.color.colorImportant));
+        }
+        if (busy!=0) {
+            colors.add(getResources().getColor(R.color.colorBusy));
+        }
 //        for (int c : ColorTemplate.VORDIPLOM_COLORS)
 //            colors.add(c);
 //

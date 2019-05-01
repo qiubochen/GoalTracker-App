@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DataUtil {
-   public static final String COLOR_GREEN="#00DB00";
-    public static final String COLOR_RED="#D81B60";
+   public static final String COLOR_NORMAL="#9AFF02";
+    public static final String COLOR_IMPORTANT="#FFFF6F";
+    public static final String COLOR_BUSY="#FF2D2D";
   @RequiresApi(api = Build.VERSION_CODES.N)
   public static List<WeekViewDisplayable<CalendarItem>> getDataList(Calendar startDate, Calendar endDate, Context context){
       SharedPreUtils sharedPreUtils=new SharedPreUtils(context);
@@ -38,7 +39,7 @@ public class DataUtil {
       eventList=eventList.stream().sorted(Comparator.comparing(Event::getPlanStartTime)).collect(Collectors.toList());
       Calendar startTime = Calendar.getInstance();
       Calendar endTime = Calendar.getInstance();
-      String color=COLOR_GREEN;
+      String color=COLOR_NORMAL;
       for (Event event : eventList) {
 
           try {
@@ -47,10 +48,14 @@ public class DataUtil {
           } catch (ParseException e) {
               e.printStackTrace();
           }
-          if (color.equals(COLOR_GREEN)){
-              color=COLOR_RED;
-          }else {
-              color=COLOR_GREEN;
+          if ("1".equals(event.getLevel())){
+              color=COLOR_NORMAL;
+          }
+          if ("2".equals(event.getLevel())){
+              color=COLOR_IMPORTANT;
+          }
+          if ("3".equals(event.getLevel())){
+              color=COLOR_BUSY;
           }
           CalendarItem weekEvent = new CalendarItem(event.getId(), "", startTime, endTime, event.getEvent(), Color.parseColor(color));
           list.add(weekEvent);

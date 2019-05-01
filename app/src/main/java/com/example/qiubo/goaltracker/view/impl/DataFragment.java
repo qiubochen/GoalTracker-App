@@ -2,6 +2,7 @@ package com.example.qiubo.goaltracker.view.impl;
 
 import android.content.Context;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,6 +94,7 @@ public class DataFragment extends Fragment  {
 
         View view=inflater.inflate(R.layout.fragment_data, container, false);
         weekView=view.findViewById(R.id.weekView);
+        weekView.setEventTextColor(Color.BLACK);
         toolbar=view.findViewById(R.id.data_toolbar);
         if (weekView!=null){
             weekView.setMonthChangeListener(new MonthChangeListener<CalendarItem>() {

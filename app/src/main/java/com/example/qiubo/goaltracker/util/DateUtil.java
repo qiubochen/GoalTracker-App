@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
+
+
     public static Calendar getNowDate(){
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(new Date());
@@ -106,5 +108,16 @@ public class DateUtil {
     public static long getBootTime() {
         return System.currentTimeMillis() - SystemClock.elapsedRealtime();
     }
+
+    public static String[] getTimeLine(String completeTime){
+
+        String[] strings=new String[3];
+        String sDay=completeTime.substring(4,6)+"/"+completeTime.substring(6,8);
+        String sTime=completeTime.substring(8,10)+":"+completeTime.substring(10,completeTime.length());
+        strings[0]=sDay;
+        strings[1]=sTime;
+        return strings;
+    }
+
 }
 

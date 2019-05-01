@@ -37,7 +37,7 @@ public class HomeReceiver extends BroadcastReceiver {
             System.out.println("5555555");
             String reason = intent1.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
             if (reason != null) {
-                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
+                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)||reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
                     //synchronized (this) {
                         Intent intent = new Intent(context, LockScreenActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION
@@ -54,7 +54,7 @@ public class HomeReceiver extends BroadcastReceiver {
                             pendingIntent.send();
                             Thread.sleep(4900L);
                             pendingIntent.send();
-                            Toast.makeText(context, "成功", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(context, "成功", Toast.LENGTH_SHORT).show();
                             System.out.println("222222");
                             //Thread.sleep(5000L);
                         } catch (PendingIntent.CanceledException e) {

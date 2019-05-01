@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qiubo.goaltracker.R;
@@ -29,7 +31,7 @@ public class LockScreenActivity extends AppCompatActivity implements View.OnClic
     TextView eventTextView,timeTextView;
     String TAG="LockScreenActivity";
     long eventId;
-    Button stopButton;
+    ImageView stopButton;
     CountDownTimer timer;
     HomeReceiver innerReceiver;
     @Override

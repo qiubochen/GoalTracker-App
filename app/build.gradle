@@ -49,7 +49,8 @@ dependencies {
 
     implementation 'org.litepal.android:java:3.0.0'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
-
+    //时间轴
+    implementation 'com.github.vipulasri:timelineview:1.1.0'
     //fastjson
     implementation 'com.alibaba:fastjson:1.1.55.android'
 
